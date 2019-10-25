@@ -5,10 +5,12 @@
 For simplifying dependencies and customisation
 """
 
-import shutil, os
-from time import time
+import os
+import shutil
 from sys import stdout
+from time import time
 from warnings import warn
+
 from IPython import get_ipython
 
 __all__ = ["master_bar", "progress_bar", "IN_NOTEBOOK", "force_console_behavior"]
