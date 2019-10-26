@@ -22,7 +22,7 @@ SAVE_APPEND = False
 MAX_COLS = 160
 
 
-def isnotebook():
+def is_notebook():
     """Determine the environment
 
     Returns:
@@ -40,7 +40,11 @@ def isnotebook():
         return False  # Probably standard Python interpreter
 
 
-IN_NOTEBOOK = isnotebook()
+def is_terminal():
+    return not is_notebook()
+
+
+IN_NOTEBOOK = is_notebook()
 
 if IN_NOTEBOOK:
     try:
