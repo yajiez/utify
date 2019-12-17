@@ -1,0 +1,228 @@
+html,
+body,
+p,
+p span,
+div,
+blockquote {
+    font-family: "Iowan Old Style", "Times New Roman", "Kaiti SC", serif;
+    font-size: 14px;
+}
+
+td.field-body > ul li {
+    font-family: "Iowan Old Style", "Times New Roman", "Kaiti SC", serif;
+    line-height: 1.9;
+}
+
+td.field-body > ul li strong{
+    font-family: Monaco, monospace;
+    font-size: 0.9em;
+}
+
+.wy-nav-content {
+    max-width: 1650px !important;
+}
+
+span.sig-paren,
+code.descname {
+    font-family: Monaco, monospace;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+cite,
+table.indextable.genindextable a,
+.class em,
+.function em,
+.method em {
+    font-family: Monaco, monospace;
+    font-size: 0.85em;
+    color: #2980B9;
+    font-style: normal;
+}
+
+code,
+code *,
+pre,
+.pre,
+pre *,
+p code,
+p code span,
+pre code *,
+.command *,
+.book * pre,
+.highlight pre,
+/*.rst-content code,*/
+.rst-content div[class^='highlight'] pre,
+.output_text *,
+.CodeMirror *,
+.highlight * {
+    font-family: "Monaco", "Menlo", "Consolas", "Kaiti SC", monospace;
+    line-height: 1.9;
+}
+
+code, .rst-content tt, .rst-content code {
+    border: none;
+}
+
+.pre {
+    font-size: 0.99em;
+}
+
+span.pre {
+    font-size: 1.18em;
+}
+
+.rst-content code.xref {
+    color: #E66C3C;
+    border: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: bold;
+    font-family: "Iowan Old Style", "Times New Roman", "Heiti SC", serif;
+    line-height: 1.6;
+}
+
+h1 {
+    margin-top: 36px;
+    margin-bottom: 16px;
+}
+
+ul li,
+ol li {
+    font-family: "Iowan Old Style", "Times New Roman", "Kaiti SC", serif;
+    line-height: 1.5;
+}
+
+.viewcode-block {
+    font-size: 11px;
+    line-height: 2;
+}
+
+.highlight {
+    background-color: #f6f6f6;
+}
+
+.reference.internal,
+.reference.internal.current {
+    line-height: 1.5;
+}
+
+/*.wy-menu-vertical,
+.wy-side-nav-search,
+.wy-nav-side {
+    max-width: 350px;
+}
+
+.wy-side-scroll {
+    max-width: 370px;
+}
+
+.wy-nav-content-wrap {
+    margin-left: 350px;
+}*/
+
+.rst-content img{
+    max-width: 99%;
+    height: auto;
+}
+
+ul, ol, dl {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+.wy-menu.wy-menu-vertical ul {
+    margin-top: 0;
+}
+
+div.nboutput div[class*=highlight] pre {
+    line-height: 1.6;
+    font-size: 0.69em;
+    padding-left: 3px;
+}
+
+.output_area.docutils.container p, .output_area.docutils.container b {
+    font-family: Monaco, "Neris", "Iowan Old Style", Verdana, sans-serif;
+    font-size: 0.8em;
+}
+
+table,
+table.dataframe {
+    font-family: Monaco, "Neris", "Iowan Old Style", Verdana, sans-serif;
+    font-size: 0.69em;
+    white-space: nowrap;
+    margin: 2px;
+}
+
+.dataframe thead th {
+    text-align: left;
+    padding: 6px;
+    white-space: nowrap;
+}
+
+th {
+    padding: 6px;
+    white-space: nowrap;
+}
+
+td {
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    padding: 3px;
+}
+
+.field-name {
+    font-family: "Iowan Old Style", Verdana, serif;
+    font-size: 15px !important;
+    font-weight: bold;
+}
+
+.field-body {
+    font-family: "Iowan Old Style", Verdana, serif;
+    font-size: 14px !important;
+}
+
+div.MathJax_Display {
+    text-align: left !important;
+    margin-left: 66px;
+}
+
+ul, ol, dl {
+    margin-top: 9px;
+}
+
+div.nboutput div[class*=highlight] pre {
+    line-height: 1.9 !important;
+}
+
+li.toctree-l1 {
+    line-height: 2;
+}
+
+li.toctree-l1 ul {
+    margin-top: 0;
+}
+
+li.toctree-l2 {
+    line-height: 1.6;
+}
+
+span.caption-text {
+    font-size: 1em;
+}
+
+ul, ol, ul li, ol li {
+    white-space: normal !important;
+}
+
+/*.output_area.docutils.container img {
+    transform: scale(0.5);
+    transform-origin: left;
+}*/
