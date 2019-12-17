@@ -29,10 +29,6 @@ This is the documentation of **utify**.
 .. toctree::
     :maxdepth: 1
 
-    Authors <authors>
-    Changelog <changelog>
-    License <license>
-
 
 Indices and tables
 ==================
