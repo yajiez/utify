@@ -1,5 +1,5 @@
 [[package]]
-category = "dev"
+category = "main"
 description = "A configurable sidebar-enabled Sphinx theme"
 name = "alabaster"
 optional = false
@@ -25,7 +25,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "1.3.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Classes Without Boilerplate"
 name = "attrs"
 optional = false
@@ -39,7 +39,7 @@ docs = ["sphinx", "zope.interface"]
 tests = ["coverage", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.interface"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Internationalization utilities"
 name = "babel"
 optional = false
@@ -58,7 +58,7 @@ python-versions = "*"
 version = "0.1.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "An easy safelist-based HTML-sanitizing tool."
 name = "bleach"
 optional = false
@@ -70,7 +70,7 @@ six = ">=1.9.0"
 webencodings = "*"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Python package for providing Mozilla's CA Bundle."
 name = "certifi"
 optional = false
@@ -78,7 +78,7 @@ python-versions = "*"
 version = "2019.11.28"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Universal encoding detector for Python 2 and 3"
 name = "chardet"
 optional = false
@@ -95,7 +95,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 version = "0.4.3"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Python parser for the CommonMark Markdown spec"
 name = "commonmark"
 optional = false
@@ -125,7 +125,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*"
 version = "4.4.1"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "XML bomb protection for Python stdlib modules"
 name = "defusedxml"
 optional = false
@@ -133,7 +133,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 version = "0.6.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Docutils -- Python Documentation Utilities"
 name = "docutils"
 optional = false
@@ -141,7 +141,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 version = "0.15.2"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Discover and load entry points from installed packages."
 name = "entrypoints"
 optional = false
@@ -161,7 +161,7 @@ six = "*"
 termcolor = "*"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Internationalized Domain Names in Applications (IDNA)"
 name = "idna"
 optional = false
@@ -169,7 +169,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "2.8"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Getting image size from png/jpeg/jpeg2000/gif file"
 name = "imagesize"
 optional = false
@@ -177,7 +177,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "1.1.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Read metadata from Python packages"
 marker = "python_version < \"3.8\""
 name = "importlib-metadata"
@@ -247,7 +247,7 @@ parso = ">=0.5.0"
 testing = ["colorama", "docopt", "pytest (>=3.1.0,<5.0.0)"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "A very fast and expressive template engine."
 name = "jinja2"
 optional = false
@@ -261,7 +261,7 @@ MarkupSafe = ">=0.23"
 i18n = ["Babel (>=0.8)"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "An implementation of JSON Schema validation for Python"
 name = "jsonschema"
 optional = false
@@ -283,7 +283,7 @@ format = ["idna", "jsonpointer (>1.13)", "rfc3987", "strict-rfc3339", "webcolors
 format_nongpl = ["idna", "jsonpointer (>1.13)", "webcolors", "rfc3986-validator (>0.1.0)", "rfc3339-validator"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Jupyter core package. A base package on which Jupyter projects rely."
 name = "jupyter-core"
 optional = false
@@ -306,7 +306,7 @@ version = "1.1.0"
 setuptools = "*"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Safely add untrusted strings to HTML/XML markup."
 name = "markupsafe"
 optional = false
@@ -329,7 +329,7 @@ pyparsing = ">=2.0.1,<2.0.4 || >2.0.4,<2.1.2 || >2.1.2,<2.1.6 || >2.1.6"
 python-dateutil = ">=2.1"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "The fastest markdown parser in pure Python"
 name = "mistune"
 optional = false
@@ -337,7 +337,7 @@ python-versions = "*"
 version = "0.8.4"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "More routines for operating on iterables, beyond itertools"
 name = "more-itertools"
 optional = false
@@ -345,7 +345,7 @@ python-versions = ">=3.5"
 version = "8.0.2"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Converting Jupyter Notebooks"
 name = "nbconvert"
 optional = false
@@ -373,7 +373,7 @@ serve = ["tornado (>=4.0)"]
 test = ["pytest", "pytest-cov", "ipykernel", "jupyter-client (>=5.3.1)", "ipywidgets (>=7)", "pebble", "mock"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "The Jupyter Notebook format"
 name = "nbformat"
 optional = false
@@ -390,7 +390,7 @@ traitlets = ">=4.1"
 test = ["pytest", "pytest-cov", "testpath"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Jupyter Notebook Tools for Sphinx"
 name = "nbsphinx"
 optional = false
@@ -414,7 +414,7 @@ python-versions = ">=3.5"
 version = "1.17.4"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Core utilities for Python packages"
 name = "packaging"
 optional = false
@@ -442,7 +442,7 @@ pytz = ">=2017.2"
 test = ["pytest (>=4.0.2)", "pytest-xdist", "hypothesis (>=3.58)"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Utilities for writing pandoc filters in python"
 name = "pandocfilters"
 optional = false
@@ -561,7 +561,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 version = "2.4.5"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Persistent/Functional/Immutable data structures"
 name = "pyrsistent"
 optional = false
@@ -616,7 +616,7 @@ python-versions = "*"
 version = "2019.3"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Python for Window Extensions"
 marker = "sys_platform == \"win32\""
 name = "pywin32"
@@ -625,7 +625,7 @@ python-versions = "*"
 version = "227"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "A docutils-compatibility bridge to CommonMark, enabling you to write CommonMark inside of Docutils & Sphinx projects."
 name = "recommonmark"
 optional = false
@@ -638,7 +638,7 @@ docutils = ">=0.11"
 sphinx = ">=1.3.1"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Python HTTP for Humans."
 name = "requests"
 optional = false
@@ -689,7 +689,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*"
 version = "1.13.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "This package provides 26 stemmers for 25 languages generated from Snowball algorithms."
 name = "snowballstemmer"
 optional = false
@@ -697,7 +697,7 @@ python-versions = "*"
 version = "2.0.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Python documentation generator"
 name = "sphinx"
 optional = false
@@ -728,7 +728,7 @@ docs = ["sphinxcontrib-websupport"]
 test = ["pytest", "pytest-cov", "html5lib", "flake8 (>=3.5.0)", "flake8-import-order", "mypy (>=0.750)", "docutils-stubs"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Read the Docs theme for Sphinx"
 name = "sphinx-rtd-theme"
 optional = false
@@ -739,7 +739,7 @@ version = "0.4.3"
 sphinx = "*"
 
 [[package]]
-category = "dev"
+category = "main"
 description = ""
 name = "sphinxcontrib-applehelp"
 optional = false
@@ -750,7 +750,7 @@ version = "1.0.1"
 test = ["pytest", "flake8", "mypy"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = ""
 name = "sphinxcontrib-devhelp"
 optional = false
@@ -761,7 +761,7 @@ version = "1.0.1"
 test = ["pytest", "flake8", "mypy"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = ""
 name = "sphinxcontrib-htmlhelp"
 optional = false
@@ -772,7 +772,7 @@ version = "1.0.2"
 test = ["pytest", "flake8", "mypy", "html5lib"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "A sphinx extension which renders display math in HTML via JavaScript"
 name = "sphinxcontrib-jsmath"
 optional = false
@@ -783,7 +783,7 @@ version = "1.0.1"
 test = ["pytest", "flake8", "mypy"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = ""
 name = "sphinxcontrib-qthelp"
 optional = false
@@ -794,7 +794,7 @@ version = "1.0.2"
 test = ["pytest", "flake8", "mypy"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = ""
 name = "sphinxcontrib-serializinghtml"
 optional = false
@@ -833,7 +833,7 @@ python-versions = "*"
 version = "1.1.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Test utilities for code working with files and commands"
 name = "testpath"
 optional = false
@@ -871,7 +871,7 @@ six = "*"
 test = ["pytest", "mock"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 name = "urllib3"
 optional = false
@@ -900,7 +900,7 @@ python-versions = "*"
 version = "0.1.7"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Character encoding aliases for legacy web content"
 name = "webencodings"
 optional = false
@@ -908,7 +908,7 @@ python-versions = "*"
 version = "0.5.1"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Backport of pathlib-compatible object wrapper for zip files"
 marker = "python_version < \"3.8\""
 name = "zipp"
@@ -924,7 +924,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pathlib2", "contextlib2", "unittest2"]
 
 [metadata]
-content-hash = "c351f6d8bbd2b6c9cd9cdeea53afef9fa03e7f702c407fcfdb65c4150b0541e7"
+content-hash = "c9fe46380487245f464a10d81235b4a5ad50ef3cc1592d10b048391afb5a61ef"
 python-versions = "^3.7"
 
 [metadata.files]
