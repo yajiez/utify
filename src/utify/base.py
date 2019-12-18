@@ -10,6 +10,18 @@ from tqdm import tqdm
 logger = logging.getLogger(__name__)
 
 
+def check_file_rows(file_path: str, encoding: str) -> int:
+    """Return the number of rows for the given file
+
+    Args:
+        file_path (str): absolute or relative file path
+        encoding (str): file encoding
+    Returns:
+        int: number of rows
+    """
+    return sum(1 for _ in open(file_path, encoding=encoding))
+
+
 def strfsec(seconds: int, ndigits=0):
     """Format the time in seconds into a time string
 
