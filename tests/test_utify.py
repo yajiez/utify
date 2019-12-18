@@ -1,5 +1,5 @@
-from utify import __version__
+import utify
 
 
 def test_version():
-    assert __version__ == '0.1.1'
+    assert utify.__version__ == '0.1.1'
