@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
 import logging
 import urllib.request
 import warnings
@@ -20,6 +21,34 @@ def check_file_rows(file_path: str, encoding: str) -> int:
         int: number of rows
     """
     return sum(1 for _ in open(file_path, encoding=encoding))
+
+
+def get_real_size(obj: object, visited=None):
+    """Recursively caculate the size in bytes of a python object
+
+    Args:
+        obj (object): any python object
+        visited (set): only used by recursive calls
+
+    Returns:
+        int: object size in bytes
+    """
+    size = sys.getsizeof(obj)
+    if visited is None:
+        visited = set()
+    obj_id = id(obj)
+    if obj_id in visited:
+        return 0
+    # important to mark as visited before entering recursion to handle self-referential objects
+    visited.add(obj_id)
+    if isinstance(obj, dict):
+        size += sum([get_real_size(v, visited) for v in obj.values()])
+        size += sum([get_real_size(k, visited) for k in obj.keys()])
+    elif hasattr(obj, '__dict__'):
+        size += get_real_size(obj.__dict__, visited)
+    elif hasattr(obj, '__iter__') and not isinstance(obj, (str, bytes, bytearray)):
+        size += sum([get_real_size(i, visited) for i in obj])
+    return size
 
 
 def strfsec(seconds: int, ndigits=0):
