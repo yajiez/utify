@@ -7,6 +7,7 @@ import warnings
 import zipfile
 from pathlib import Path
 from tqdm import tqdm
+import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -49,6 +50,55 @@ def get_real_size(obj: object, visited=None):
     elif hasattr(obj, '__iter__') and not isinstance(obj, (str, bytes, bytearray)):
         size += sum([get_real_size(i, visited) for i in obj])
     return size
+
+
+def approximate_size(size, use_1024_bytes=True):
+    """Convert a file size to human-readable form.
+
+    Borrowed from Dive into Python 3 examples.
+
+    Args:
+        size (int): file size in bytes
+        use_1024_bytes (bool): if True (default), use multiples of 1024, if False, 1000
+
+    Returns:
+        str: a string of the file size in a human readable form
+    """
+    if size < 0:
+        raise ValueError('number must be non-negative')
+
+    suffixes = {
+        1000: ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+        1024: ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+    }
+
+    multiple = 1024 if use_1024_bytes else 1000
+    for suffix in suffixes[multiple]:
+        size /= multiple
+        if size < multiple:
+            return '{0:.1f} {1}'.format(size, suffix)
+
+    raise ValueError('number too large')
+
+
+def memory_usage(obj, deep=False, use_1024_bytes=False):
+    """Return memory usage of a pandas DataFrame or Series in human-readable form.
+
+    Args:
+        obj (object): any Python object
+        deep (bool): args pass into df.memory_usage() method
+        use_1024_bytes (bool): if True (default), use multiples of 1024, if False, 1000
+
+    Returns:
+        str: a string of the DataFrame size in a human readable form
+    """
+    if isinstance(obj, pd.DataFrame):
+        size = obj.memory_usage(deep=deep).sum()
+    elif isinstance(obj, pd.Series):
+        size = obj.memory_usage(deep=deep)
+    else:
+        size = get_real_size(obj) if deep else sys.getsizeof(obj)
+    return approximate_size(size, use_1024_bytes=use_1024_bytes)
 
 
 def strfsec(seconds: int, ndigits=0):
