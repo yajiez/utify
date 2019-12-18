@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+__version__ = '0.1.1'
+
 from .base import make_listing
 from .base import make_divider
 from .base import strfsec
