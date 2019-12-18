@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 
+from .base import approximate_size
 from .base import make_listing
 from .base import make_divider
 from .base import strfsec

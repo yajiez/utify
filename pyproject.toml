@@ -1,8 +1,9 @@
 [tool.poetry]
 name = "utify"
 version = "0.1.2"
-description = ""
+description = "Utility Functions for Python"
 authors = ["yajiez <yajiez.me@gmail.com>"]
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.7"
