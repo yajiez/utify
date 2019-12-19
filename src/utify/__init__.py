@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 __version__ = '0.1.2'
+__author__ = "yajiez"
+__copyright__ = "yajiez"
 
 from .base import approximate_size
 from .base import make_listing

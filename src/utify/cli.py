@@ -2,10 +2,6 @@
 import sys
 import argparse
 
-__author__ = "yajiez"
-__copyright__ = "yajiez"
-
-
 commands = {}
 
 parser = argparse.ArgumentParser(

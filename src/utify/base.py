@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
+import logging
 import os
 import sys
-import logging
 import urllib.request
 import warnings
 import zipfile
 from pathlib import Path
-from tqdm import tqdm
+
+import numpy as np
 import pandas as pd
+from IPython.core.display import display
+from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 
@@ -24,11 +27,132 @@ def check_file_rows(file_path: str, encoding: str) -> int:
     return sum(1 for _ in open(file_path, encoding=encoding))
 
 
-def get_real_size(obj: object, visited=None):
+def lazyread(file_path, encoding, skip_rows=None):
+    """Return a lazy reader (generator) for the given file
+
+    Args:
+        file_path (str): path of the file to read
+        encoding (str): file encoding info
+        skip_rows (int): number of rows to skip
+
+    Return:
+        generator: a generator which yield the file content line by line
+    """
+    with open(file_path, encoding=encoding) as f:
+        if skip_rows:
+            for _ in range(skip_rows):
+                f.readline()
+            while True:
+                line = f.readline()
+                if line:
+                    yield line
+                else:
+                    break
+
+
+def get_h5table_shape(file_path, data_key):
+    """Return the shape of a HDF5 table
+
+    Args:
+        file_path (str): path of the HDF5 file
+        data_key (str): key of the table
+
+    Return:
+        tuple: a tuple of numbers of rows and columns
+    """
+    store = pd.HDFStore(file_path)
+    info = store.get_storer(data_key).group.table
+    return info.attrs['NROWS'], len(info.colnames)
+
+
+def get_h5table_cols(file_path, data_key):
+    """Return a list of column names for a HDF5 table
+
+    Args:
+        file_path (str): path of the HDF5 file
+        data_key (str): key of the table
+
+    Return:
+        list: a list of all the column names
+    """
+    store = pd.HDFStore(file_path)
+    info = store.get_storer(data_key).group.table
+    return list(info.colnames)
+
+
+def show_h5_info(file_path, show_index=True, head=None):
+    """Show useful information about a HDF5 file
+
+    Args:
+        file_path (str): path of the HDF5 file
+        show_index (bool): whether to show the index information
+        head (int): number of head rows to display
+
+    Return:
+        None
+    """
+    store = pd.HDFStore(file_path)
+    print('Data Keys:', ', '.join(store.keys()))
+    for k in store.keys():
+        info = store.get_storer(k).group.table
+        make_divider()
+        print('Basic information about {}:'.format(k))
+        chunk_shape, colnames, nrow = info.chunkshape, info.colnames, info.attrs['NROWS']
+        print('Numer of rows: {}'.format(nrow))
+        print('{} columns found in this daatset.'.format(len(colnames)))
+        print('Chunk shape of storage: ', chunk_shape)
+        if show_index:
+            col_index_status = info.colindexed
+            cols_with_index = []
+            cols_without_index = []
+            for col, has_index in col_index_status.items():
+                if has_index:
+                    cols_with_index.append(col)
+                else:
+                    cols_without_index.append(col)
+            print('Indexed cols: ({})'.format(', '.join(cols_with_index)))
+            print('Non-indexed cols: ({})'.format(', '.join(cols_without_index)))
+        if head is not None:
+            print(f'first {head} rows:')
+            rows = store.select(k, start=0, stop=head)
+            display(rows)
+            print('column data types:')
+            display(rows.dtypes.to_frame(name='dtype').T)
+    store.close()
+    make_divider()
+
+
+def add_h5_index(file_path, force=False):
+    """Add index for a HDF5 file
+
+    Args:
+        file_path (str): path of the HDF5 file
+        force (bool): use force=True to add the index
+
+    Return:
+        None
+    """
+    if force:
+        store = pd.HDFStore(file_path, mode='r+')
+        for k in store.keys():
+            if np.all(list(store.get_storer(k).group.table.colindexed.values())):
+                logger.info('\nAll columns in {} have already been indexed. Skipped.'.format(k))
+            else:
+                logger.info('\nCreating index for all columns in {} ......'.format(k))
+                store.create_table_index(k, columns=True)
+                logger.info('Task Success!')
+        store.close()
+    else:
+        print("You're modifying the data in-place, make sure you have another copy!")
+        print('Use force=True if you really want to do this.')
+        print('Task Canceled.')
+
+
+def get_real_size(obj, visited=None):
     """Recursively caculate the size in bytes of a python object
 
     Args:
-        obj (object): any python object
+        obj: any python object
         visited (set): only used by recursive calls
 
     Returns:
