@@ -31,9 +31,10 @@ sphinx = "^2.3.0"
 sphinx_rtd_theme = "^0.4.3"
 recommonmark = "^0.6.0"
 nbsphinx = "^0.5.0"
+toml = "^0.10.0"
 
 [tool.poetry.extras]
-doc = ["shpinx", "recommonmark", "sphinx_rtd_theme", "nbsphinx"]
+doc = ["shpinx", "recommonmark", "sphinx_rtd_theme", "nbsphinx", "toml"]
 
 [tool.poetry.scripts]
 utify = "utify.cli:main"

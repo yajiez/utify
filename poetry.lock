@@ -867,6 +867,14 @@ version = "0.4.4"
 test = ["pathlib2"]
 
 [[package]]
+category = "dev"
+description = "Python Library for Tom's Obvious, Minimal Language"
+name = "toml"
+optional = false
+python-versions = "*"
+version = "0.10.0"
+
+[[package]]
 category = "main"
 description = "Fast, Extensible Progress Meter"
 name = "tqdm"
@@ -950,7 +958,7 @@ testing = ["pathlib2", "contextlib2", "unittest2"]
 doc = ["recommonmark", "sphinx_rtd_theme", "nbsphinx"]
 
 [metadata]
-content-hash = "3a7e529ed4d6bbc9a1fc37cf3b1a266344cfdd977955c5cca119edc2c22e20bf"
+content-hash = "a1884632b12c3c847a1da5142cb2a32f0d5dee6ae0e89472df75b16d52d7e7bc"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -1468,6 +1476,11 @@ termcolor = [
 testpath = [
     {file = "testpath-0.4.4-py2.py3-none-any.whl", hash = "sha256:bfcf9411ef4bf3db7579063e0546938b1edda3d69f4e1fb8756991f5951f85d4"},
     {file = "testpath-0.4.4.tar.gz", hash = "sha256:60e0a3261c149755f4399a1fff7d37523179a70fdc3abdf78de9fc2604aeec7e"},
+]
+toml = [
+    {file = "toml-0.10.0-py2.7.egg", hash = "sha256:f1db651f9657708513243e61e6cc67d101a39bad662eaa9b5546f789338e07a3"},
+    {file = "toml-0.10.0-py2.py3-none-any.whl", hash = "sha256:235682dd292d5899d361a811df37e04a8828a5b1da3115886b73cf81ebc9100e"},
+    {file = "toml-0.10.0.tar.gz", hash = "sha256:229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c"},
 ]
 tqdm = [
     {file = "tqdm-4.40.2-py2.py3-none-any.whl", hash = "sha256:7543892c59720e36e4212180274d8f58dde36803bc1f6370fd09afa20b8f5892"},
