@@ -6,11 +6,8 @@
 import os
 import sys
 import inspect
-from pathlib import Path
-import toml
 
-metadata = toml.load(Path(__file__).parent.parent/'pyproject.toml')['tool']['poetry']
-version = release = metadata['version']
+version = release = '0.1.5'
 
 __location__ = os.path.join(os.getcwd(), os.path.dirname(
     inspect.getfile(inspect.currentframe())))
