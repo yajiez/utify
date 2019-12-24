@@ -25,5 +25,7 @@ from .plotting import plot_pca_result
 from . import dataframe
 from .dataframe import prepare_latex_table
 
+from .fastprogress import is_notebook
+from .fastprogress import is_terminal
 from .fastprogress import master_bar
 from .fastprogress import progress_bar
