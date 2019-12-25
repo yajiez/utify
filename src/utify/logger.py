@@ -23,8 +23,8 @@ class ColoredFormatter(logging.Formatter):
         # grey = "\x1b[38;21m"
         # cyan = "\x1b[36;21m"
         # yellow = "\x1b[33;21m"
-        # blue = "\x1b[34;21m"
-        # green = "\x1b[32;21m"
+        blue = "\x1b[34;21m"
+        green = "\x1b[32;21m"
         bold_yellow = "\x1b[33;1m"
         bold_blue = "\x1b[34;1m"
         bold_green = "\x1b[32;1m"
@@ -34,8 +34,8 @@ class ColoredFormatter(logging.Formatter):
         logformat = "%(asctime)s [%(levelname).1s]: %(message)s"
 
         self.FORMATS = {
-            logging.DEBUG: bold_blue + "🤔 " + logformat + reset,
-            logging.INFO: bold_green + "✨ " + logformat + reset,
+            logging.DEBUG: blue + "🤔 " + logformat + reset,
+            logging.INFO: green + "✨ " + logformat + reset,
             logging.WARNING: bold_yellow + "🔥 " + logformat + reset,
             logging.ERROR: red + "\u2718 " + logformat + reset,
             logging.CRITICAL: bold_red + "\u2718 " + logformat + reset
