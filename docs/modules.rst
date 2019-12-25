@@ -2,13 +2,13 @@
 =============================================
 .. automodule:: utify
     :members:
+    :imported-members:
     :show-inheritance:
 
 `utify.base`
 =============================================
 .. automodule:: utify.base
     :members:
-    :show-inheritance:
 
 `utify.logger`
 =============================================
