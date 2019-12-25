@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "utify"
-version = "0.1.8"
+version = "0.1.9"
 description = "Utility Functions for Python"
 authors = ["yajiez <yajiez.me@gmail.com>"]
 readme = "README.md"

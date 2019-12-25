@@ -1,3 +1,9 @@
+`utify`
+=============================================
+.. automodule:: utify
+    :members:
+    :show-inheritance:
+
 `utify.base`
 =============================================
 .. automodule:: utify.base
