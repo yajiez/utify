@@ -31,8 +31,9 @@ class ColoredFormatter(logging.Formatter):
         red = "\x1b[31;21m"
         bold_red = "\x1b[31;1m"
         reset = "\x1b[0m"
-        logformat = "%(asctime)s [%(levelname).1s]: %(message)s"
-
+        # logformat = "%(asctime)s [%(levelname).1s]: %(message)s"
+        logformat = "%(message)-60s %(asctime)s"
+        
         self.FORMATS = {
             logging.DEBUG: blue + "🤔 " + logformat + reset,
             logging.INFO: green + "✨ " + logformat + reset,
