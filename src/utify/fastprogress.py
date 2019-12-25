@@ -292,7 +292,7 @@ class NBProgressBar(ProgressBar):
         """Define what should be performed after each iter
         """
         if not self.leave and self.show:
-            clear_output()  # self.out.update(HTML(''))
+            self.out.update(HTML(''))
         self.is_active = False
 
     def on_update(self, val, text, interrupted=False):
