@@ -6,7 +6,8 @@ import urllib.request
 import warnings
 import zipfile
 from pathlib import Path
-
+import functools
+from halo import Halo
 import numpy as np
 import pandas as pd
 from IPython.core.display import display
@@ -348,3 +349,34 @@ def unzip(zf, save_dir=None, overwrite=False):
         with zipfile.ZipFile(zf, 'r') as handle:
             handle.extractall(save_dir)
         logger.debug(f"Successful unzip {zf}")
+
+
+class Spinner(Halo):
+    """A better Spinner based on Halo"""
+
+    def __init__(self, text='', clean=False, **kwargs):
+        super().__init__(**kwargs)
+        self.text = text
+        self.clean = clean
+
+    def __enter__(self):
+        return self.start()
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        if not exc_type:
+            if self.clean:
+                self.stop()
+            else:
+                self.succeed(self.text + ' successfully.')
+        else:
+            self.fail(self.text + ' failed.')
+
+    def __call__(self, func):
+        self.text = self.text or ('Running ' + func.__name__)
+
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            with self:
+                return func(*args, **kwargs)
+
+        return wrapper
