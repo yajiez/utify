@@ -12,7 +12,11 @@ from warnings import warn
 
 from IPython import get_ipython
 
-__all__ = ["master_bar", "progress_bar", "IN_NOTEBOOK", "force_console_behavior"]
+__all__ = [
+    "is_notebook", "is_terminal",
+    "master_bar", "progress_bar",
+    "IN_NOTEBOOK", "force_console_behavior"
+]
 
 NO_BAR = False
 WRITER_FN = print

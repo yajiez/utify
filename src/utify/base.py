@@ -7,11 +7,13 @@ import warnings
 import zipfile
 from pathlib import Path
 import functools
-from halo import Halo
+from halo import Halo, HaloNotebook
 import numpy as np
 import pandas as pd
 from IPython.core.display import display
 from tqdm import tqdm
+
+from .fastprogress import is_terminal
 
 logger = logging.getLogger(__name__)
 
@@ -380,3 +382,61 @@ class Spinner(Halo):
                 return func(*args, **kwargs)
 
         return wrapper
+
+
+class SpinnerNB(HaloNotebook):
+    """A better Spinner based on HaloNotebook"""
+
+    def __init__(self, text='', clean=False, **kwargs):
+        super().__init__(**kwargs)
+        self.text = text
+        self.clean = clean
+
+    def __enter__(self):
+        return self.start()
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        if not exc_type:
+            if self.clean:
+                self.stop()
+            else:
+                self.succeed(self.text + ' successfully.')
+        else:
+            self.fail(self.text + ' failed.')
+
+    def __call__(self, func):
+        self.text = self.text or ('Running ' + func.__name__)
+
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            with self:
+                return func(*args, **kwargs)
+
+        return wrapper
+
+    def stop_and_persist(self, symbol=' ', text=None):
+        """Stops the spinner and persists the final frame to be shown.
+        Parameters
+        ----------
+        symbol : str, optional
+            Symbol to be shown in final frame
+        text: str, optional
+            Text to be shown in final frame
+
+        Returns
+        -------
+        self
+        """
+        if not self.enabled:
+            return self
+
+        output = '\r{} {}\n'.format(*[
+            (text, symbol)
+            if self._placement == 'right' else
+            (symbol, text)
+        ][0])
+        self.clear()
+        print(output)
+
+
+spinner = Spinner if is_terminal() else SpinnerNB

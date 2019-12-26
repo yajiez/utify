@@ -10,6 +10,8 @@ from .base import strfsec
 from .base import download
 from .base import unzip
 from .base import Spinner
+from .base import SpinnerNB
+from .base import spinner
 
 from .dataset import load_spam
 from .dataset import load_esl_mixture
