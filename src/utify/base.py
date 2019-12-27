@@ -361,7 +361,14 @@ class Spinner(Halo):
         self.text = text
         self.clean = clean
 
+    def _init_text(self, s=''):
+        if not self.text:
+            self.text = 'Running ' + str(s)
+        if not self.text.endswith(' '):
+            self.text += ' '
+
     def __enter__(self):
+        self._init_text()
         return self.start()
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -369,12 +376,12 @@ class Spinner(Halo):
             if self.clean:
                 self.stop()
             else:
-                self.succeed(self.text + ' successfully.')
+                self.succeed(self.text + 'successfully.')
         else:
-            self.fail(self.text + ' failed.')
+            self.fail(self.text + 'failed.')
 
     def __call__(self, func):
-        self.text = self.text or ('Running ' + func.__name__)
+        self._init_text(func.__name__)
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
