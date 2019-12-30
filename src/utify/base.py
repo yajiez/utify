@@ -1,19 +1,21 @@
 # -*- coding: utf-8 -*-
+import itertools
 import logging
 import os
 import sys
 import urllib.request
 import warnings
 import zipfile
+from contextlib import contextmanager
+from multiprocessing import Process
 from pathlib import Path
-import functools
-from halo import Halo, HaloNotebook
+from time import sleep
+
 import numpy as np
 import pandas as pd
 from IPython.core.display import display
 from tqdm import tqdm
-
-from .fastprogress import is_terminal
+from wasabi import Printer
 
 logger = logging.getLogger(__name__)
 
@@ -353,97 +355,31 @@ def unzip(zf, save_dir=None, overwrite=False):
         logger.debug(f"Successful unzip {zf}")
 
 
-class Spinner(Halo):
-    """A better Spinner based on Halo"""
+@contextmanager
+def spinner(text='Loading...', clean=False):
+    printer = Printer()
+    spinchars = '⠙⠹⠸⠼⠴⠦⠧⠇⠏'
 
-    def __init__(self, text='', clean=False, **kwargs):
-        super().__init__(**kwargs)
-        self.text = text
-        self.clean = clean
+    def spin(s):
+        for char in itertools.cycle(spinchars):
+            sys.stdout.write("\r{} {}".format(char, s))
+            sys.stdout.flush()
+            sleep(0.1)
 
-    def _init_text(self, s=''):
-        if not self.text:
-            self.text = 'Running ' + str(s)
-        if not self.text.endswith(' '):
-            self.text += ' '
+    t = Process(target=spin, args=(text,))
+    t.start()
+    try:
+        yield
+    except Exception as e:
+        t.terminate()
+        printer.fail(text + ' failed.')
+        raise e
+    t.terminate()
 
-    def __enter__(self):
-        self._init_text()
-        return self.start()
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        if not exc_type:
-            if self.clean:
-                self.stop()
-            else:
-                self.succeed(self.text + 'successfully.')
-        else:
-            self.fail(self.text + 'failed.')
-
-    def __call__(self, func):
-        self._init_text(func.__name__)
-
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            with self:
-                return func(*args, **kwargs)
-
-        return wrapper
-
-
-class SpinnerNB(HaloNotebook):
-    """A better Spinner based on HaloNotebook"""
-
-    def __init__(self, text='', clean=False, **kwargs):
-        super().__init__(**kwargs)
-        self.text = text
-        self.clean = clean
-
-    def __enter__(self):
-        return self.start()
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        if not exc_type:
-            if self.clean:
-                self.stop()
-            else:
-                self.succeed(self.text + ' successfully.')
-        else:
-            self.fail(self.text + ' failed.')
-
-    def __call__(self, func):
-        self.text = self.text or ('Running ' + func.__name__)
-
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            with self:
-                return func(*args, **kwargs)
-
-        return wrapper
-
-    def stop_and_persist(self, symbol=' ', text=None):
-        """Stops the spinner and persists the final frame to be shown.
-        Parameters
-        ----------
-        symbol : str, optional
-            Symbol to be shown in final frame
-        text: str, optional
-            Text to be shown in final frame
-
-        Returns
-        -------
-        self
-        """
-        if not self.enabled:
-            return self
-
-        output = '\r{} {}\n'.format(*[
-            (text, symbol)
-            if self._placement == 'right' else
-            (symbol, text)
-        ][0])
-        self.clear()
-        print(output)
-
-
-spinner = Spinner if is_terminal() else SpinnerNB
+    sys.stdout.write("\r")
+    if clean:
+        for _ in range(len(text) // 4 + 1):
+            sys.stdout.write("\x1b[2K")
+    else:
+        printer.good(text + ' succeed.')
+    sys.stdout.flush()
