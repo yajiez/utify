@@ -9,7 +9,7 @@ import zipfile
 from contextlib import contextmanager
 from multiprocessing import Process
 from pathlib import Path
-from time import sleep
+import time
 
 import numpy as np
 import pandas as pd
@@ -364,8 +364,9 @@ def spinner(text='Loading...', clean=False):
         for char in itertools.cycle(spinchars):
             sys.stdout.write("\r{} {}".format(char, s))
             sys.stdout.flush()
-            sleep(0.1)
+            time.sleep(0.1)
 
+    stime = time.time()
     t = Process(target=spin, args=(text,))
     t.start()
     try:
@@ -381,5 +382,6 @@ def spinner(text='Loading...', clean=False):
         for _ in range(len(text) // 4 + 1):
             sys.stdout.write("\x1b[2K")
     else:
-        printer.good(text + ' succeed.')
+        time_used = strfsec(time.time() - stime)
+        printer.good(f'{text} succeed. ({time_used})')
     sys.stdout.flush()
