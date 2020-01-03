@@ -2,6 +2,48 @@ import sys
 import logging
 from pathlib import Path
 from datetime import datetime
+from textwrap import TextWrapper
+from functools import partial
+
+
+def strwrap(text, width=66, right_padding=True, subsequent_indent=' ', **kwargs):
+    wrapper = TextWrapper(width=width, subsequent_indent=subsequent_indent, **kwargs)
+    lines = text.split('\n')
+    wrapped = wrapper.wrap(lines[0])
+    if len(lines) > 1:
+        for line in lines[1:]:
+            wrapped.extend(wrapper.wrap(line))
+    if right_padding and (len(wrapped) > 1):
+        wrapped[-1] += ' ' + (width - len(wrapped[-1]) - 1) * '-'
+        wrapped[-1] += '-' * (len(subsequent_indent) - 2)
+    return '\n'.join(wrapped)
+
+
+class TextWrappedLogger:
+    def __init__(self, logger, **wrap_kwargs):
+        self.logger = logger
+        self.wrap_kwargs = wrap_kwargs or {}
+        self.strwrap = partial(strwrap, subsequent_indent='     ', **self.wrap_kwargs)
+
+    def info(self, msg, *args, **kwargs):
+        msg = self.strwrap(msg)
+        self.logger.info(msg, *args, **kwargs)
+
+    def debug(self, msg, *args, **kwargs):
+        msg = self.strwrap(msg)
+        self.logger.debug(msg, *args, **kwargs)
+
+    def warning(self, msg, *args, **kwargs):
+        msg = self.strwrap(msg)
+        self.logger.warning(msg, *args, **kwargs)
+
+    def error(self, msg, *args, **kwargs):
+        msg = self.strwrap(msg)
+        self.logger.error(msg, *args, **kwargs)
+
+    def critical(self, msg, *args, **kwargs):
+        msg = self.strwrap(msg)
+        self.logger.critical(msg, *args, **kwargs)
 
 
 class ColoredFormatter(logging.Formatter):
@@ -21,25 +63,26 @@ class ColoredFormatter(logging.Formatter):
         super().__init__()
 
         # grey = "\x1b[38;21m"
-        # cyan = "\x1b[36;21m"
-        # yellow = "\x1b[33;21m"
-        blue = "\x1b[34;21m"
-        green = "\x1b[32;21m"
+        cyan = "\x1b[36;21m"
+        # purple = "\x1b[35;21m"
+        yellow = "\x1b[33;21m"
+        # blue = "\x1b[34;21m"
+        # green = "\x1b[32;21m"
         bold_yellow = "\x1b[33;1m"
-        bold_blue = "\x1b[34;1m"
-        bold_green = "\x1b[32;1m"
+        # bold_blue = "\x1b[34;1m"
+        # bold_green = "\x1b[32;1m"
         red = "\x1b[31;21m"
         bold_red = "\x1b[31;1m"
         reset = "\x1b[0m"
         # logformat = "%(asctime)s [%(levelname).1s]: %(message)s"
-        logformat = "%(message)-60s %(asctime)s"
-        
+        logformat = "%(message)-66s %(asctime)s"
+
         self.FORMATS = {
-            logging.DEBUG: blue + "🤔 " + logformat + reset,
-            logging.INFO: green + "✨ " + logformat + reset,
+            logging.DEBUG: yellow + "🧐 " + logformat + reset,
+            logging.INFO: cyan + "📎 " + logformat + reset,
             logging.WARNING: bold_yellow + "🔥 " + logformat + reset,
-            logging.ERROR: red + "\u2718 " + logformat + reset,
-            logging.CRITICAL: bold_red + "\u2718 " + logformat + reset
+            logging.ERROR: red + "\u2718  " + logformat + reset,
+            logging.CRITICAL: bold_red + "\u2718  " + logformat + reset
         }
 
     def format(self, record):
@@ -106,4 +149,4 @@ def get_logger(name=None, level='INFO', stream=None, logdir=None, logfile=None,
     if not has_file_handler and logfile:
         logger.debug(f"Logs will be saved into {logfile}")
 
-    return logger
+    return TextWrappedLogger(logger)
