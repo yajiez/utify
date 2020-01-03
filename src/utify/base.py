@@ -362,7 +362,7 @@ def spinner(text='Loading...', clean=False):
 
     def spin(s):
         for char in itertools.cycle(spinchars):
-            sys.stdout.write("\r{} {}".format(char, s))
+            sys.stdout.write("\r\033[96m{} {}".format(char, s))
             sys.stdout.flush()
             time.sleep(0.1)
 
@@ -382,6 +382,6 @@ def spinner(text='Loading...', clean=False):
         for _ in range(len(text) // 4 + 1):
             sys.stdout.write("\x1b[2K")
     else:
-        time_used = strfsec(time.time() - stime)
-        printer.good(f'{text} succeed. ({time_used})')
+        time_used = strfsec(int(time.time() - stime))
+        printer.good(f'{text} succeed in {time_used}.')
     sys.stdout.flush()
