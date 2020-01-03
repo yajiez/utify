@@ -112,8 +112,8 @@ class ColoredFormatter(logging.Formatter):
             logging.DEBUG: yellow + "🧐 " + logformat + reset,
             logging.INFO: cyan + "📎 " + logformat + reset,
             logging.WARNING: bold_yellow + "🔥 " + logformat + reset,
-            logging.ERROR: red + "\u2718  " + logformat + reset,
-            logging.CRITICAL: bold_red + "\u2718  " + logformat + reset
+            logging.ERROR: red + " \u2718 " + logformat + reset,
+            logging.CRITICAL: bold_red + " \u2718 " + logformat + reset
         }
 
         self.EXTRAS = {
