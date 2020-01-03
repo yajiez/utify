@@ -173,14 +173,12 @@ def get_logger(name=None, level='INFO', stream=None, logdir=None, logfile=None,
             left = (max_width - len(datetime_header) - 2) // 2
             right = max_width - len(datetime_header) - 2 - left
             logger.info("Start Logging\n" + "=" * left + ' ' + datetime_header + ' ' + "=" * right)
+            logger.info(f"Log messages will be saved to {logfile}")
 
     if not has_stream_handler:
         ch = logging.StreamHandler(stream=stream or sys.stdout)
         ch.setLevel(level)
         ch.setFormatter(ColoredFormatter())
         logger.addHandler(ch)
-
-    if not has_file_handler and logfile:
-        logger.debug(f"Logs will be saved into {logfile}")
 
     return TextWrappedLogger(logger)
