@@ -1,9 +1,11 @@
 import sys
 import logging
+from collections import defaultdict
 from pathlib import Path
 from datetime import datetime
 from textwrap import TextWrapper
 from functools import partial
+from .base import make_divider
 
 
 def strwrap(text, width=66, right_padding=True, subsequent_indent=' ', **kwargs):
@@ -24,26 +26,48 @@ class TextWrappedLogger:
         self.logger = logger
         self.wrap_kwargs = wrap_kwargs or {}
         self.strwrap = partial(strwrap, subsequent_indent='     ', **self.wrap_kwargs)
+        self.counts = defaultdict(int)
 
     def info(self, msg, *args, **kwargs):
         msg = self.strwrap(msg)
         self.logger.info(msg, *args, **kwargs)
+        self.counts['info'] += 1
 
     def debug(self, msg, *args, **kwargs):
         msg = self.strwrap(msg)
         self.logger.debug(msg, *args, **kwargs)
+        self.counts['debug'] += 1
 
     def warning(self, msg, *args, **kwargs):
         msg = self.strwrap(msg)
         self.logger.warning(msg, *args, **kwargs)
+        self.counts['warning'] += 1
 
     def error(self, msg, *args, **kwargs):
         msg = self.strwrap(msg)
         self.logger.error(msg, *args, **kwargs)
+        self.counts['error'] += 1
 
     def critical(self, msg, *args, **kwargs):
         msg = self.strwrap(msg)
         self.logger.critical(msg, *args, **kwargs)
+        self.counts['critical'] += 1
+
+    def good(self, msg):
+        msg = self.strwrap(msg)
+        self.logger.info(msg, extra={'tag': 'good'})
+        self.counts['good'] += 1
+
+    def fail(self, msg):
+        msg = self.strwrap(msg)
+        self.logger.info(msg, extra={'tag': 'fail'})
+        self.counts['fail'] += 1
+
+    def divider(self, msg):
+        assert len(msg) < 66, "msg is too long, Please make it shorter than 66."
+        msg = make_divider(msg, line_max=70)
+        self.logger.info(msg, extra={'tag': 'divider'})
+        self.counts['divider'] += 1
 
 
 class ColoredFormatter(logging.Formatter):
@@ -67,10 +91,11 @@ class ColoredFormatter(logging.Formatter):
         # purple = "\x1b[35;21m"
         yellow = "\x1b[33;21m"
         # blue = "\x1b[34;21m"
+        lightblue = "\033[94m"
         # green = "\x1b[32;21m"
         bold_yellow = "\x1b[33;1m"
         # bold_blue = "\x1b[34;1m"
-        # bold_green = "\x1b[32;1m"
+        bold_green = "\x1b[32;1m"
         red = "\x1b[31;21m"
         bold_red = "\x1b[31;1m"
         reset = "\x1b[0m"
@@ -85,8 +110,16 @@ class ColoredFormatter(logging.Formatter):
             logging.CRITICAL: bold_red + "\u2718  " + logformat + reset
         }
 
+        self.EXTRAS = {
+            'good': bold_green + "🎉 " + logformat + reset,
+            'fail': bold_red + "😞 " + logformat + reset,
+            'divider': lightblue + "✨ " + logformat + reset
+        }
+
     def format(self, record):
         log_fmt = self.FORMATS.get(record.levelno)
+        if hasattr(record, 'tag'):
+            log_fmt = self.EXTRAS[getattr(record, 'tag')]
         formatter = logging.Formatter(log_fmt, datefmt='%Y-%m-%d %H:%M:%S')
         return formatter.format(record)
 
