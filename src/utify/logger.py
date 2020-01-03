@@ -1,5 +1,6 @@
 import sys
 import logging
+from typing import TextIO
 from collections import defaultdict
 from pathlib import Path
 from datetime import datetime
@@ -126,22 +127,22 @@ class ColoredFormatter(logging.Formatter):
 
 def get_logger(name=None, level='INFO', stream=None, logdir=None, logfile=None,
                file_level='DEBUG', mode='a', encoding='utf-8', delay=False, max_width=100):
-    """Get a logger for logging
+    """Get a logger to start logging
 
     Args:
-        name:
-        level:
-        stream:
-        logdir:
-        logfile:
-        file_level:
-        mode:
-        encoding:
-        delay:
-        max_width:
+        name (str): the name of the logger. If None, return the root logger
+        level (str or int): logging level of the logger for the stream handler
+        stream (TextIO): if None, use sys.stdout
+        logdir (str or Path): if None, now logfile will be created
+        logfile (str or Path): if None and logdir is set, then use [name]_[%Y-%m-%dT%H:%M:%S].log
+        file_level (str or int): logging level of the logger for the file handler
+        mode (str): the mode of the file handler, default 'a'
+        encoding (str): encoding of the log file, default UTF-8
+        delay (bool): passed to the file handler creation
+        max_width (int): the width of the start logging message in the file handler
 
     Returns:
-        logging.Logger: A Python logger for logging outputs
+        logging.Logger: A Python logger for logging beautiful messages
     """
     logger = logging.getLogger(name)
     logger.setLevel(file_level)
