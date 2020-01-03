@@ -14,6 +14,7 @@ from .base import spinner
 from .dataset import load_spam
 from .dataset import load_esl_mixture
 
+from .logger import strwrap
 from .logger import get_logger
 
 from .plotting import get_available_mpl_style_names

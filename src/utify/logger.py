@@ -10,6 +10,11 @@ from .base import make_divider
 
 
 def strwrap(text, width=66, right_padding=True, subsequent_indent=' ', **kwargs):
+    try:
+        text = str(text)
+    except ValueError as err:
+        print(f"{type(text)} can not be converted to a string!")
+        raise err
     wrapper = TextWrapper(width=width, subsequent_indent=subsequent_indent, **kwargs)
     lines = text.split('\n')
     wrapped = wrapper.wrap(lines[0])
