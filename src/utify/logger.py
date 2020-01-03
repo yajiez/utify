@@ -1,12 +1,13 @@
 import sys
 import logging
-from typing import TextIO
+from typing import TextIO, Iterable, Callable
 from collections import defaultdict
 from pathlib import Path
 from datetime import datetime
 from textwrap import TextWrapper
 from functools import partial
 from .base import make_divider
+from .base import make_listing
 
 
 def strwrap(text, width=66, right_padding=True, subsequent_indent=' ', **kwargs):
@@ -32,48 +33,68 @@ class TextWrappedLogger:
         self.logger = logger
         self.wrap_kwargs = wrap_kwargs or {}
         self.strwrap = partial(strwrap, subsequent_indent='     ', **self.wrap_kwargs)
-        self.counts = defaultdict(int)
+        self._counts = defaultdict(int)
+
+    @property
+    def counts(self):
+        return dict(self._counts)
 
     def info(self, msg, *args, **kwargs):
         msg = self.strwrap(msg)
         self.logger.info(msg, *args, **kwargs)
-        self.counts['info'] += 1
+        self._counts['info'] += 1
 
     def debug(self, msg, *args, **kwargs):
         msg = self.strwrap(msg)
         self.logger.debug(msg, *args, **kwargs)
-        self.counts['debug'] += 1
+        self._counts['debug'] += 1
 
     def warning(self, msg, *args, **kwargs):
         msg = self.strwrap(msg)
         self.logger.warning(msg, *args, **kwargs)
-        self.counts['warning'] += 1
+        self._counts['warning'] += 1
 
     def error(self, msg, *args, **kwargs):
         msg = self.strwrap(msg)
         self.logger.error(msg, *args, **kwargs)
-        self.counts['error'] += 1
+        self._counts['error'] += 1
 
     def critical(self, msg, *args, **kwargs):
         msg = self.strwrap(msg)
         self.logger.critical(msg, *args, **kwargs)
-        self.counts['critical'] += 1
+        self._counts['critical'] += 1
 
     def good(self, msg):
         msg = self.strwrap(msg)
         self.logger.info(msg, extra={'tag': 'good'})
-        self.counts['good'] += 1
+        self._counts['good'] += 1
 
     def fail(self, msg):
         msg = self.strwrap(msg)
         self.logger.info(msg, extra={'tag': 'fail'})
-        self.counts['fail'] += 1
+        self._counts['fail'] += 1
 
-    def divider(self, msg):
+    def divider(self, msg=''):
         assert len(msg) < 66, "msg is too long, Please make it shorter than 66."
         msg = make_divider(msg, line_max=70)
         self.logger.info(msg, extra={'tag': 'divider'})
-        self.counts['divider'] += 1
+        self._counts['divider'] += 1
+
+    def listing(self, items: Iterable, header: str = '', func: Callable = str, **kwargs):
+        header = header or "✨ "
+        msg = header + make_listing(items, func=func, **kwargs)
+        msg = self.strwrap(msg)
+        self.logger.info(msg)
+        self._counts['listing'] += 1
+
+    def summary(self):
+        if not self.counts:
+            self.warning("You have not called this logger. Now you called it once :)")
+        else:
+            self.divider("Logging Summary")
+            self._counts['divider'] -= 1
+            self.listing(self.counts.items(), func=lambda i: f"{i[0]:<10s}: {i[1]}")
+            self.divider()
 
 
 class ColoredFormatter(logging.Formatter):
@@ -89,6 +110,7 @@ class ColoredFormatter(logging.Formatter):
         "white": 7,
         "grey": 8
     """
+
     def __init__(self):
         super().__init__()
 
@@ -109,16 +131,16 @@ class ColoredFormatter(logging.Formatter):
         logformat = "%(message)-66s %(asctime)s"
 
         self.FORMATS = {
-            logging.DEBUG: yellow + "🧐 " + logformat + reset,
-            logging.INFO: cyan + "📎 " + logformat + reset,
-            logging.WARNING: bold_yellow + "🔥 " + logformat + reset,
-            logging.ERROR: red + " \u2718 " + logformat + reset,
+            logging.DEBUG:    yellow + "🧐 " + logformat + reset,
+            logging.INFO:     cyan + "📎 " + logformat + reset,
+            logging.WARNING:  bold_yellow + "🔥 " + logformat + reset,
+            logging.ERROR:    red + " \u2718 " + logformat + reset,
             logging.CRITICAL: bold_red + " \u2718 " + logformat + reset
         }
 
         self.EXTRAS = {
-            'good': bold_green + "🎉 " + logformat + reset,
-            'fail': bold_red + "😞 " + logformat + reset,
+            'good':    bold_green + "🎉 " + logformat + reset,
+            'fail':    bold_red + "😞 " + logformat + reset,
             'divider': lightblue + "✨ " + logformat + reset
         }
 
