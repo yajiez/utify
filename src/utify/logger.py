@@ -10,7 +10,19 @@ from .base import make_divider
 from .base import make_listing
 
 
-def strwrap(text, width=66, right_padding=True, subsequent_indent=' ', **kwargs):
+def strwrap(text, width=66, right_padding=False, subsequent_indent=' ', **kwargs):
+    """Wrap the text while keeping the original line seperators
+
+    Args:
+        text (str): the text to be wrapped
+        width (int): max line width
+        right_padding (bool): if True, add --- to the right to reach the max width
+        subsequent_indent (str): passed to textwrap.TextWrapper
+        **kwargs: additional keyword args passed to textwrap.TextWrapper
+
+    Returns:
+        str: the wrapped text
+    """
     try:
         text = str(text)
     except ValueError as err:
@@ -34,6 +46,32 @@ class TextWrappedLogger:
         self.wrap_kwargs = wrap_kwargs or {}
         self.strwrap = partial(strwrap, subsequent_indent='     ', **self.wrap_kwargs)
         self._counts = defaultdict(int)
+
+    def set_stream_level(self, level):
+        has_stream_handler = False
+        for handler in self.logger.handlers:
+            if isinstance(handler, logging.StreamHandler):
+                has_stream_handler = True
+                handler.setLevel(level)
+                self.logger.info(f"Set the stream handler level to {level}")
+        if not has_stream_handler:
+            self.warning(f"Logger has no stream handlers")
+
+    def set_file_level(self, level):
+        has_file_handler = False
+        for handler in self.logger.handlers:
+            if isinstance(handler, logging.FileHandler):
+                has_file_handler = True
+                handler.setLevel(level)
+                self.logger.info(f"Set the file handler level to {level}")
+        if not has_file_handler:
+            self.warning(f"Logger has no file handlers")
+
+    def on(self):
+        self.logger.disabled = False
+
+    def off(self):
+        self.logger.disabled = True
 
     @property
     def counts(self):
@@ -111,9 +149,10 @@ class ColoredFormatter(logging.Formatter):
         "grey": 8
     """
 
-    def __init__(self):
+    def __init__(self, timestamp=None):
         super().__init__()
-
+        if timestamp:
+            assert timestamp in ('left', 'right')
         # grey = "\x1b[38;21m"
         cyan = "\x1b[36;21m"
         # purple = "\x1b[35;21m"
@@ -128,7 +167,12 @@ class ColoredFormatter(logging.Formatter):
         bold_red = "\x1b[31;1m"
         reset = "\x1b[0m"
         # logformat = "%(asctime)s [%(levelname).1s]: %(message)s"
-        logformat = "%(message)-66s %(asctime)s"
+        if timestamp == 'left':
+            logformat = "%(asctime)s %(message)-66s"
+        elif timestamp == 'right':
+            logformat = "%(message)-66s %(asctime)s"
+        else:
+            logformat = "%(message)-80s"
 
         self.FORMATS = {
             logging.DEBUG:    yellow + "🧐 " + logformat + reset,
@@ -153,11 +197,12 @@ class ColoredFormatter(logging.Formatter):
 
 
 def get_logger(name=None, level='INFO', stream=None, logdir=None, logfile=None,
-               file_level='DEBUG', mode='a', encoding='utf-8', delay=False, max_width=100):
+               file_level='DEBUG', mode='a', encoding='utf-8', delay=False,
+               max_width=100, right_padding=False, timestamp=None):
     """Get a logger to start logging
 
     Args:
-        name (str): the name of the logger. If None, return the root logger
+        name (str): the name of the logger. If None, return the __main__ logger
         level (str or int): logging level of the logger for the stream handler
         stream (TextIO): if None, use sys.stdout
         logdir (str or Path): if None, now logfile will be created
@@ -167,12 +212,16 @@ def get_logger(name=None, level='INFO', stream=None, logdir=None, logfile=None,
         encoding (str): encoding of the log file, default UTF-8
         delay (bool): passed to the file handler creation
         max_width (int): the width of the start logging message in the file handler
+        right_padding (bool): if True, add padding to the right side of wrapped text
+        timestamp (str): can be 'left', 'right', or None
 
     Returns:
         logging.Logger: A Python logger for logging beautiful messages
     """
-    logger = logging.getLogger(name)
+    logger = logging.getLogger(name or "__main__")
     logger.setLevel(file_level)
+
+    # Detect and keep existing handlers
     has_stream_handler = False
     has_file_handler = False
     for handler in logger.handlers:
@@ -181,31 +230,34 @@ def get_logger(name=None, level='INFO', stream=None, logdir=None, logfile=None,
         if isinstance(handler, logging.FileHandler):
             has_file_handler = True
 
-    if not has_file_handler:
-        if logdir:
-            logdir = Path(logdir)
-            logdir.mkdir(exist_ok=True)
-            logfile = logfile or f"{name}_{datetime.now().strftime('%Y-%m-%dT%H:%M:%S')}.log"
-            logfile = logdir.joinpath(logfile)
-            if mode == 'w':
-                assert not logfile.exists(), f"Logfile {logfile} is already exist! Please use mode='a'"
-            fh = logging.FileHandler(logfile, mode=mode, encoding=encoding, delay=delay)
-            fh.setLevel(file_level)
-            fh.setFormatter(logging.Formatter(
-                "%(asctime)s [%(levelname).1s] %(name)s: %(message)s",
-                datefmt='%Y-%m-%d %H:%M:%S'
-            ))
-            logger.addHandler(fh)
-            datetime_header = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            left = (max_width - len(datetime_header) - 2) // 2
-            right = max_width - len(datetime_header) - 2 - left
-            logger.info("Start Logging\n" + "=" * left + ' ' + datetime_header + ' ' + "=" * right)
-            logger.info(f"Log messages will be saved to {logfile}")
+    # Create file handler if not exist
+    if (not has_file_handler) and logdir:
+        logdir = Path(logdir)
+        logdir.mkdir(exist_ok=True)
+        if not logfile:
+            logfile = f"{name}_{datetime.now().strftime('%Y-%m-%dT%H:%M:%S')}.log"
+        logfile = logdir.joinpath(logfile)
+        if mode == 'w':
+            assert not logfile.exists(), f"File {logfile} is already exist! Please use mode='a'"
+        fh = logging.FileHandler(logfile, mode=mode, encoding=encoding, delay=delay)
+        fh.setLevel(file_level)
+        fh.setFormatter(logging.Formatter(
+            "%(asctime)s [%(levelname).1s] %(name)s: %(message)s",
+            datefmt='%Y-%m-%d %H:%M:%S'
+        ))
+        logger.addHandler(fh)
+
+        # Add a datetime header each time the logfile being updated
+        datetime_header = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        left = (max_width - len(datetime_header) - 2) // 2
+        right = max_width - len(datetime_header) - 2 - left
+        logger.info("Start Logging\n" + "=" * left + ' ' + datetime_header + ' ' + "=" * right)
+        logger.info(f"Log file: {logfile}")
 
     if not has_stream_handler:
         ch = logging.StreamHandler(stream=stream or sys.stdout)
         ch.setLevel(level)
-        ch.setFormatter(ColoredFormatter())
+        ch.setFormatter(ColoredFormatter(timestamp=timestamp))
         logger.addHandler(ch)
 
-    return TextWrappedLogger(logger)
+    return TextWrappedLogger(logger, right_padding=right_padding)
