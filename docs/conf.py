@@ -7,7 +7,7 @@ import os
 import sys
 import inspect
 
-version = release = '0.2.7'
+version = release = '0.2.8'
 
 __location__ = os.path.join(os.getcwd(), os.path.dirname(
     inspect.getfile(inspect.currentframe())))

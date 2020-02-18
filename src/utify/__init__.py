@@ -17,6 +17,8 @@ from .dataset import load_esl_mixture
 from .logger import strwrap
 from .logger import get_logger
 
+from .cache import cache
+
 from .plotting import get_available_mpl_style_names
 from .plotting import get_mpl_style
 from .plotting import set_mpl_style
