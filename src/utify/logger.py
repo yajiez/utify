@@ -10,7 +10,7 @@ from .base import make_divider
 from .base import make_listing
 
 
-def strwrap(text, width=66, right_padding=False, subsequent_indent=' ', **kwargs):
+def strwrap(text, width=80, right_padding=False, subsequent_indent=' ', **kwargs):
     """Wrap the text while keeping the original line seperators
 
     Args:
@@ -114,7 +114,7 @@ class TextWrappedLogger:
 
     def divider(self, msg=''):
         assert len(msg) < 66, "msg is too long, Please make it shorter than 66."
-        msg = make_divider(msg, line_max=70)
+        msg = make_divider(msg, line_max=88)
         self.logger.info(msg, extra={'tag': 'divider'})
         self._counts['divider'] += 1
 
@@ -168,9 +168,9 @@ class ColoredFormatter(logging.Formatter):
         reset = "\x1b[0m"
         # logformat = "%(asctime)s [%(levelname).1s]: %(message)s"
         if timestamp == 'left':
-            logformat = "%(asctime)s %(message)-66s"
+            logformat = "%(asctime)s %(message)-80s"
         elif timestamp == 'right':
-            logformat = "%(message)-66s %(asctime)s"
+            logformat = "%(message)-80s %(asctime)s"
         else:
             logformat = "%(message)-80s"
 
