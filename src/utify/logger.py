@@ -216,7 +216,7 @@ def get_logger(name=None, level='INFO', stream=None, logdir=None, logfile=None,
         timestamp (str): can be 'left', 'right', or None
 
     Returns:
-        logging.Logger: A Python logger for logging beautiful messages
+        utify.logger.TextWrappedLogger: A Python logger for logging beautiful messages
     """
     logger = logging.getLogger(name or "__main__")
     logger.setLevel(file_level)
