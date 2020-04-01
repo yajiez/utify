@@ -171,13 +171,13 @@ def plot_pca_result(explained_variance_ratio, markers=None, title=None, xlabel=N
 mpl_style_serif = {
     'mathtext.fontset': 'cm',
     'font.family':      'serif',
-    'font.serif':       'Iowan Old Style, serif'
+    'font.serif':       'Times New Roman, Times, Iowan Old Style, serif'
 }
 
 mpl_style_sans = {
     'mathtext.fontset': 'cm',
     'font.family':      'sans-serif',
-    'font.sans-serif':  'Google Sans, sans-serif'
+    'font.sans-serif':  'Google Sans, Open Sans, Neris, sans-serif'
 }
 
 available_mpl_styles = {
